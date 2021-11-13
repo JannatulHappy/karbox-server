@@ -135,13 +135,12 @@ client.connect((err) => {
   app.put("/statusUpdate/:id", async (req, res) => {
     const filter = { _id: ObjectId(req.params.id) };
     console.log(req.params.id);
-    const result = await ordersCollection.updateOne(filter, {
+    const result = await ordersCollection.findOneAndUpdate (filter, {
       $set: {
         status: req.body.status,
       },
     });
     res.send(result);
-    console.log(result);
   });
    // delete booking from manage booking
    app.delete("/DeleteManageBooking/:id", async (req, res) => {
