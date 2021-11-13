@@ -126,7 +126,7 @@ client.connect((err) => {
   });
    /// all order
    app.get("/allOrders", async (req, res) => {
-    // console.log("hello");
+    
     const result = await ordersCollection.find({}).toArray();
     res.send(result);
   });
