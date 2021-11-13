@@ -142,17 +142,7 @@ client.connect((err) => {
     const result = await ordersCollection.updateOne(query, Booking);
     res.json(result);
   });
-  // // status update
-  // app.patch("/statusUpdate/:id", async (req, res) => {
-  //   const filter = { _id: ObjectId(req.params.id) };
-  //   console.log(req.params.id);
-  //   const result = await ordersCollection.findOneAndUpdate (filter, {
-  //     $set: {
-  //       status: req.body.status,
-  //     },
-  //   });
-  //   res.json(result);
-  // });
+ 
    // delete booking from manage booking
    app.delete("/DeleteManageBooking/:id", async (req, res) => {
     const result = await ordersCollection.deleteOne({
