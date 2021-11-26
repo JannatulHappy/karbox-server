@@ -130,7 +130,7 @@ client.connect((err) => {
     const result = await ordersCollection.find({}).toArray();
     res.send(result);
   });
-  // status update
+  // update status to shipped
   app.put("/approveBooking/:id", async (req, res) => {
     const id = req.params.id;
     const query = { _id: ObjectId(id) };
