@@ -107,6 +107,15 @@ client.connect((err) => {
   });
   //get  my order by using email query
 
+  app.get("/payment/:id", async (req, res) => {
+    const id = req.params.id;
+    const query = { _id: ObjectId(id) };
+    const result = await ordersCollection.findOne(query);
+    res.send(result);
+  });
+
+ 
+
   app.get("/myOrders/:email", async (req, res) => {
     const result = await ordersCollection
       .find({
@@ -124,9 +133,8 @@ client.connect((err) => {
     });
     res.send(result);
   });
-   /// all order
-   app.get("/allOrders", async (req, res) => {
-    
+  /// all order
+  app.get("/allOrders", async (req, res) => {
     const result = await ordersCollection.find({}).toArray();
     res.send(result);
   });
@@ -142,16 +150,16 @@ client.connect((err) => {
     const result = await ordersCollection.updateOne(query, Booking);
     res.json(result);
   });
- 
-   // delete booking from manage booking
-   app.delete("/DeleteManageBooking/:id", async (req, res) => {
+
+  // delete booking from manage booking
+  app.delete("/DeleteManageBooking/:id", async (req, res) => {
     const result = await ordersCollection.deleteOne({
       _id: ObjectId(req.params.id),
     });
     res.send(result);
   });
-   // delete collections from manage collection
-   app.delete("/deleteManageCollection/:id", async (req, res) => {
+  // delete collections from manage collection
+  app.delete("/deleteManageCollection/:id", async (req, res) => {
     const result = await servicesCollection.deleteOne({
       _id: ObjectId(req.params.id),
     });
