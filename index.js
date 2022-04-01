@@ -144,6 +144,13 @@ client.connect((err) => {
     const result = await ordersCollection.updateOne(query, Booking);
     res.json(result);
   });
+  app.get("/payment/:id", async (req, res) => {
+    const id = req.params.id;
+    const query = { _id: ObjectId(id) };
+   
+    const result = await ordersCollection.findOne(query);
+    res.json(result);
+  });
 
   // delete booking from manage booking
   app.delete("/DeleteManageBooking/:id", async (req, res) => {
