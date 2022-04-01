@@ -14,6 +14,7 @@ const client = new MongoClient(uri, {
 const port = process.env.PORT || 5000;
 const app = express();
 app.use(cors());
+
 app.use(express.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 
@@ -105,14 +106,7 @@ client.connect((err) => {
     console.log(result);
     res.send(result);
   });
-  //get  my order by using email query
-
-  app.get("/payment/:id", async (req, res) => {
-    const id = req.params.id;
-    const query = { _id: ObjectId(id) };
-    const result = await ordersCollection.findOne(query);
-    res.send(result);
-  });
+ 
 
  
 
