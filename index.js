@@ -5,6 +5,8 @@ require("dotenv").config();
 const MongoClient = require("mongodb").MongoClient;
 const ObjectId = require("mongodb").ObjectId;
 
+const stripe = require("stripe")(process.env.STRIPE_SECRET);
+
 const uri = `mongodb+srv://${process.env.DB_USER}:${process.env.DB_PASS}@cluster0.kkrwn.mongodb.net/myFirstDatabase?retryWrites=true&w=majority`;
 const client = new MongoClient(uri, {
   useNewUrlParser: true,
@@ -106,9 +108,37 @@ client.connect((err) => {
     console.log(result);
     res.send(result);
   });
- 
+  app.put('/payment/:id', async (req, res) => {
+    const id = req.params.id;
+    const payment = req.body;
+    const filter = { _id: ObjectId(id) };
+    const updateDoc = {
+        $set: {
+            payment: payment
+        }
+    };
+    const result = await ordersCollection.updateOne(filter, updateDoc);
+    res.json(result);
+})
 
- 
+
+  app.post("/create-payment-intent", async (req, res) => {
+    const paymentInfo = req.body;
+    const amount = paymentInfo.price * 100;
+    // Create a PaymentIntent with the order amount and currency
+    const paymentIntent = await stripe.paymentIntents.create({
+      amount: amount,
+      currency: "usd",
+      // payment_method_types:[card],
+      automatic_payment_methods: {
+        enabled: true,
+      },
+    });
+
+    res.send({
+      clientSecret: paymentIntent.client_secret,
+    });
+  });
 
   app.get("/myOrders/:email", async (req, res) => {
     const result = await ordersCollection
@@ -147,7 +177,7 @@ client.connect((err) => {
   app.get("/payment/:id", async (req, res) => {
     const id = req.params.id;
     const query = { _id: ObjectId(id) };
-   
+
     const result = await ordersCollection.findOne(query);
     res.json(result);
   });
